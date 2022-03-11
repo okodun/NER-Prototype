@@ -31,4 +31,21 @@ if __name__ == '__main__':
         print(file)
     print()
 
-    search_word = input("Enter a company your are looking for: ")
+    # get search word
+    while True:
+        search_word = input("Enter a company your are looking for: ")
+        if search_word != "":
+            print()
+            break
+        print(ErrorText.START + "Please enter a search word!" + ErrorText.END)
+        print()
+
+    # print information for user
+    # implement different algorithms
+    print("Available algorithms to determine text similarity:")
+    print(BoldText.START + "--> cosine distance (c)" + BoldText.END + ": short description bla bla bla...")
+    search_algorithm = input("Enter your desired search algorithm (default is cosine distance): ")
+    if search_algorithm in {"cosine distance", "c"}:
+        search_algorithm = "cosine distance"
+    else:
+        search_algorithm = "cosine distance"
