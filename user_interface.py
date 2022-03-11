@@ -1,3 +1,4 @@
+import ui_library
 import ui_library as ui
 from ui_library import BoldText, ErrorText
 
@@ -45,7 +46,14 @@ if __name__ == '__main__':
     print("Available algorithms to determine text similarity:")
     print(BoldText.START + "--> cosine distance (c)" + BoldText.END + ": short description bla bla bla...")
     search_algorithm = input("Enter your desired search algorithm (default is cosine distance): ")
+    print()
     if search_algorithm in {"cosine distance", "c"}:
         search_algorithm = "cosine distance"
     else:
         search_algorithm = "cosine distance"
+
+    # get term frequency and print results
+    results = ui_library.compare_tf_idf(files, search_word)
+    print(BoldText.START + f'Term Frequency for %s:' % search_word + BoldText.END)
+    for result in results:
+        print(f'%s: %.2f%%' % (result, results[result] * 100))

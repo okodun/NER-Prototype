@@ -2,6 +2,7 @@
 
 import os
 import platform
+import naive_library
 from colorama import Fore
 
 
@@ -44,3 +45,17 @@ def check_path(path: str) -> []:
         return entries
     else:
         return None
+
+
+def compare_tf_idf(files: [], search_term: str, min_similarity=None) -> {}:
+    """ returns term frequency of search term for all given files """
+
+    # create result dictionary
+    results = {}
+
+    # calculate term frequency for search word in each file
+    for file in files:
+        tokens = naive_library.tokenize(file)
+        results.update({file: naive_library.tf_idf(tokens, search_term, min_similarity)})
+
+    return results
