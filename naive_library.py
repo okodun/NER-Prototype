@@ -1,4 +1,7 @@
-""" library for naive implementation """
+"""
+Library for naive implementation.
+Contains only functions that work in the background.
+"""
 
 import re
 from string import punctuation, whitespace

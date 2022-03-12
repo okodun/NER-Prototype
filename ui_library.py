@@ -1,4 +1,7 @@
-""" library for keeping the user interface small """
+"""
+Library for keeping the user interface small.
+Uses naive_library as base for its own functions.
+"""
 
 import os
 import platform
@@ -56,6 +59,25 @@ def compare_tf_idf(files: [], search_term: str, min_similarity=None) -> {}:
     # calculate term frequency for search word in each file
     for file in files:
         tokens = naive_library.tokenize(file)
+        results.update({file: naive_library.tf_idf(tokens, search_term, min_similarity)})
+
+    return results
+
+
+def compare_tf_idf_all(files: [], search_term: str, min_similarity=None) -> {}:
+    """ returns term frequency of search term for all given files combined """
+
+    # create result dictionary
+    results = {}
+
+    # create pool of tokens
+    tokens = []
+    for file in files:
+        text_tokens = naive_library.tokenize(file)
+        [tokens.append(tt) for tt in text_tokens]
+
+    # calculate term frequency for search word in each file
+    for file in files:
         results.update({file: naive_library.tf_idf(tokens, search_term, min_similarity)})
 
     return results
