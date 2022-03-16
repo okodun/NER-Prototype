@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     # get term frequency and print results
     # term frequency with all documents or for each document?
-    results = ui.compare_tf_idf(files, search_word)
+    results = ui.get_term_frequency(files, search_word)
     print(BoldText.START + f'Term Frequency for %s:' % search_word + BoldText.END)
     for result in results:
-        print(f'%s: %.2f%%' % (result, results[result] * 100))
+        print(f'%s: %.2f%%' % (result, results[result]))

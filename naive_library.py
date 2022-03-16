@@ -57,7 +57,7 @@ def cosine_distance(word1: str, word2: str) -> float:
         return 0.0
 
 
-def tf_idf(tokens: [], search_term: str, min_similarity=None) -> float:
+def term_frequency(tokens: [], search_term: str, min_similarity=None) -> float:
     """ return the term frequency of a given search word in a list of tokens """
 
     # define minimum similarity if undefined
