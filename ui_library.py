@@ -1,13 +1,16 @@
 """
-Library for keeping the user interface small.
-Uses naive_library as base for its own functions.
+Library for keeping the actual user interface small.
+Implements nlp functionality based on naive_library.py and spacy_library.py.
+Contains furthermore functions for traversing directories and classes for cmdline formats.
+
+Created by Mert Caliskan (22442138) and Felix Schuhmann (22749060).
 """
 
 import os
 import platform
 import naive_library
-from colorama import Fore
 import re
+from colorama import Fore
 from math import log2
 from string import punctuation, whitespace
 from spacy_library import SpacyModel
@@ -78,6 +81,7 @@ def get_tf_idf(files: [], search_term: str, min_similarity=None) -> {}:
     min_similarity = 0.8 if min_similarity is None or min_similarity <= 0 else min_similarity
 
     def contains(file_tokens: []) -> bool:
+        """ checks whether a list of tokens contains the search term """
         search_tokens = []
         [search_tokens.append(tok) for tok in re.split(f'[%s%s]' % (punctuation, whitespace), search_term) if
          tok != ""]
@@ -101,7 +105,7 @@ def get_tf_idf(files: [], search_term: str, min_similarity=None) -> {}:
     for token in tokens:
         if contains(token):
             r += 1
-    n = log2(len(files) / r)
+    n = log2(len(files) / r) if r > 0 else 0
 
     # calculate term frequency for search word in each file
     term_frequencies = get_term_frequency(files, search_term)
@@ -120,7 +124,7 @@ def get_spacy_similarities(files: [], search_term: str) -> {}:
     # calculate average similarity
     results = {}
     for file in files:
-        results.update({file: sm.find_similarities(search_term, file)})
+        results.update({file: sm.find_avg_max_similarity(search_term, file)})
 
     return results
 
@@ -134,11 +138,13 @@ def get_spacy_organizations(files: [], search_term: str, top_n=None) -> {}:
     # create spaCy model
     sm = SpacyModel()
 
-    # calculate organizations
+    # find most similar organizations
     results = {}
     for file in files:
+        organizations = {}
         similar = sm.find_organizations(search_term, file)
         for s in sorted(similar, key=lambda x: similar[x][0], reverse=True)[:top_n]:
-            results.update({s: (similar[s][0], similar[s][1])})
+            organizations.update({s: (similar[s][0], similar[s][1])})
+        results.update({file: organizations})
 
     return results

@@ -1,6 +1,8 @@
 """
 Library for naive implementation.
-Contains only functions that work in the background.
+Contains basic nlp functionality.
+
+Created by Mert Caliskan (22442138) and Felix Schuhmann (22749060).
 """
 
 import re
@@ -48,7 +50,7 @@ def cosine_distance(word1: str, word2: str) -> float:
         return cw, sw, lw
 
     # calculate word vectors of given words
-    v1, v2 = __vectorize(word1), __vectorize(word2)
+    v1, v2 = __vectorize(word1.lower()), __vectorize(word2.lower())
 
     # return cosine distance
     try:

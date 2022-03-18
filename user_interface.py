@@ -1,9 +1,14 @@
 """
 User interface for the prototype.
 Contains the program structure.
+Implements currently only functionality for determining similar organizations.
+
+
+Created by Mert Caliskan (22442138) and Felix Schuhmann (22749060).
 """
 
 import ui_library as ui
+import warnings
 from ui_library import BoldText, ErrorText
 
 if __name__ == '__main__':
@@ -16,7 +21,7 @@ if __name__ == '__main__':
     print("-> Format for absolute path: /home/USERNAME/DIRECTORY")
     print("-> Format for relative path: ~/DIRECTORY")
     print(BoldText.START + "Windows" + BoldText.END)
-    print("-> Only absolute path format available: C:\\Users\\USERNAME")
+    print("-> Only absolute path format available: C:\\Users\\USERNAME\\DIR")
 
     # get files
     while True:
@@ -45,18 +50,16 @@ if __name__ == '__main__':
         print(ErrorText.START + "Please enter a search word!" + ErrorText.END)
         print()
 
-    # print information for user
-    # implement different algorithms
-    print("Available algorithms to determine text similarity:")
-    print(BoldText.START + "--> cosine distance (c)" + BoldText.END + ": short description bla bla bla...")
+    # print information for user (other algorithms could be implemented here)
+    print("Currently available algorithms to determine text similarity:")
+    print(BoldText.START + "--> most similar named entities (ner)" + BoldText.END)
 
     # chose algorithm
     while True:
-        search_algorithm = input("Enter your desired search algorithm (default is cosine distance): ")
-        if search_algorithm in {"cosine distance", "c", ""}:
+        search_algorithm = input("Enter your desired search algorithm (default is ner): ")
+        if search_algorithm in {"most similar named entities", "ner", ""}:
             if search_algorithm == "":
-                print("Using cosine distance.")
-            search_algorithm = "cosine distance"
+                print("Using ner.")
             print()
             break
         else:
@@ -65,9 +68,14 @@ if __name__ == '__main__':
                   ErrorText.END)
             print()
 
-    # get term frequency and print results
-    # term frequency with all documents or for each document?
-    results = ui.get_term_frequency(files, search_word)
-    print(BoldText.START + f'Term Frequency for %s:' % search_word + BoldText.END)
-    for result in results:
-        print(f'%s: %.2f%%' % (result, results[result]))
+    # find most similar organizations and print result
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        results = ui.get_spacy_organizations(files, search_word)
+        print(BoldText.START + f'Following named entities were found for %s:' % search_word + BoldText.END)
+        for result in results:
+            print(" " + result)
+            for r in results[result]:
+                print(" ", r, ":", results[result][r][0])
+            print()
+    print(BoldText.START + "Values closer to 1 are more similar to the searched company." + BoldText.END)
